@@ -113,7 +113,7 @@ namespace Bot.Builder.Community.Components.Handoff.ServiceNow
                                     subtitle: option.description,
                                     images: new List<CardImage>()
                                     {
-                                        new CardImage($"https://{_credentials.ServiceNowTenant}{option.attachment}")
+                                        new CardImage($"https://{_credentials.ServiceNowTenant}/{option.attachment}")
                                     },
                                     buttons: new List<CardAction>
                                     {
@@ -162,17 +162,12 @@ namespace Bot.Builder.Community.Components.Handoff.ServiceNow
                             responseActivity.Attachments.Add(card.ToAttachment());
                         }
                         break;
-                    case "OutputHtml":
-
-                        // We can't render HTML inside of conversations.
-                        responseActivity = MessageFactory.Text(StripTags(item.value.ToString()));
-
-                        break;
+                    
                     case "Boolean":
                         List<CardAction> booleanCardActions = new List<CardAction>();
 
-                        booleanCardActions.Add(new CardAction("imBack", title: "Yes", displayText: "Yes", value: "true"));
-                        booleanCardActions.Add(new CardAction("imBack", title: "No", displayText: "Yes", value: "false"));
+                        booleanCardActions.Add(new CardAction("imBack", title: "Yes", displayText: "Yes", value: "Yes"));
+                        booleanCardActions.Add(new CardAction("imBack", title: "No", displayText: "Yes", value: "No"));
                         var booleanHeroCard = new HeroCard(buttons: booleanCardActions);
 
                         responseActivity = MessageFactory.Attachment(booleanHeroCard.ToAttachment());
@@ -365,20 +360,6 @@ namespace Bot.Builder.Community.Components.Handoff.ServiceNow
             }
         }
 
-        // Crude flattening of HTML content into just it's string content. ServiceNow uses HTML in some scenarios which can't be rendered in most conversational canvases.
-        public static string StripTags(string htmlResponse)
-        {
-            // create whitespace between html elements, so that words do not run together
-            htmlResponse = htmlResponse.Replace(">", "> ");
-
-            var doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(htmlResponse);
-
-            // strip html decoded text from html
-            string text = HttpUtility.HtmlDecode(doc.DocumentNode.InnerText);
-
-            // replace all whitespace with a single space and remove leading and trailing whitespace
-            return Regex.Replace(text, @"\s+", " ").Trim();
-        }
+       
     }
 }
