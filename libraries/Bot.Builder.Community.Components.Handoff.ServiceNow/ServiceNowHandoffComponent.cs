@@ -5,7 +5,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bot.Builder.Community.Components.Handoff.LivePerson
+namespace Bot.Builder.Community.Components.Handoff.ServiceNow
 {
     public class ServiceNowHandoffComponent : BotComponent
     {
